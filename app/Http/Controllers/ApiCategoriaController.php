@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Categoria;
 
 class ApiCategoriaController extends Controller
 {
@@ -14,12 +14,12 @@ class ApiCategoriaController extends Controller
      */
     public function index()
     {
-        $datos = [
+        /*$datos = [
             ["nombre" => "Informatica", "detalle" => "servicios de informatica"],
             ["nombre" => "electronica", "detalle" => "servicios de electronica"]
-        ];
-        //return User::All();
-        return response()->json(["servicios" => $datos], 200);
+        ];*/
+        $datos = Categoria::All();
+        return response()->json(["categorias" => $datos], 200);
     }
 
     /**
@@ -30,7 +30,12 @@ class ApiCategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cat = new Categoria;
+        $cat->nombre = $request->nombre;
+        $cat->descripcion = $request->descripcion;
+        $cat->save();
+
+        return response()->json("La categoria se ha registrado correctamente", 201);
     }
 
     /**
@@ -41,7 +46,8 @@ class ApiCategoriaController extends Controller
      */
     public function show($id)
     {
-        //
+        $categoria = Categoria::find($id);
+        return response()->json($categoria);
     }
 
     /**
@@ -53,7 +59,12 @@ class ApiCategoriaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cat = Categoria::find($id); // busqueda por id
+        $cat->nombre = $request->nombre;
+        $cat->descripcion = $request->descripcion;
+        $cat->save();
+
+        return response()->json("La categoria se ha Modificado correctamente", 200);
     }
 
     /**
@@ -64,6 +75,8 @@ class ApiCategoriaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cat = Categoria::find($id);
+        $cat->delete();
+        return response()->json("La categoria se ha Eliminado correctamente", 200);
     }
 }
